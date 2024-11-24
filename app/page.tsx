@@ -4,6 +4,7 @@ import { useState } from "react";
 
 // Components
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import UploadArea from "@/components/UploadBox";
 import TransactionTable from "@/components/TransactionTable";
 
@@ -15,7 +16,6 @@ import { FormattedBilling } from "@/lib/pdf-parser/types";
 
 // View Models
 import { useTransactionViewModel } from "@/view-models/TransactionViewModel";
-import { Separator } from "@/components/ui/separator";
 
 // Utils
 import { cn } from "@/lib/utils";
