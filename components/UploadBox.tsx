@@ -12,6 +12,7 @@ export default function UploadArea({ onFileUpload }: UploadAreaProps) {
     },
     onDrop: async (acceptedFiles) => {
       const file = acceptedFiles[0];
+
       if (file) {
         onFileUpload(file);
       }

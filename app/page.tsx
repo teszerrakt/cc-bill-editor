@@ -7,6 +7,8 @@ import TransactionTable from "@/components/TransactionTable";
 
 // View Models
 import { useTransactionViewModel } from "@/view-models/TransactionViewModel";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const {
@@ -41,22 +43,31 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="container px-4 py-8 mx-auto">
-        <div className="flex items-center justify-center min-h-screen">
+    <div className="min-h-screen px-4 bg-background text-foreground">
+      <div className="flex w-full min-h-screen gap-4">
+        <div
+          className={cn("flex justify-center items-center ", {
+            "w-full": !transactions?.length,
+            "w-1/3": transactions?.length,
+          })}
+        >
           <UploadArea onFileUpload={handleFileUpload} />
         </div>
-        {transactions.length > 0 && (
-          <div className="mt-8">
-            <TransactionTable
-              transactions={transactions}
-              updateTransaction={updateTransaction}
-              addNewRow={addNewRow}
-              deleteRow={deleteRow}
-            />
-            <Button onClick={saveToCSV} className="mt-4">
-              Save to CSV
-            </Button>
+
+        {transactions?.length > 0 && (
+          <div className="flex gap-4 p-4">
+            <Separator orientation="vertical" />
+            <div className="">
+              <TransactionTable
+                transactions={transactions}
+                updateTransaction={updateTransaction}
+                addNewRow={addNewRow}
+                deleteRow={deleteRow}
+              />
+              <Button onClick={saveToCSV} className="mt-4">
+                Save to CSV
+              </Button>
+            </div>
           </div>
         )}
       </div>
