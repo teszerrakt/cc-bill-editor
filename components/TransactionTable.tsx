@@ -8,6 +8,7 @@ import {
 // Components
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -141,7 +142,10 @@ export default function TransactionTable({
           ))}
         </TableBody>
       </Table>
-      <Button onClick={addNewRow} className="mt-4">
+
+      <Separator />
+
+      <Button className="w-full mt-4" onClick={addNewRow} variant={"outline"}>
         Add New Row
       </Button>
     </div>

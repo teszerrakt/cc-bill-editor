@@ -1,7 +1,6 @@
 "use client";
 
 // Components
-import { Button } from "@/components/ui/button";
 import UploadArea from "@/components/UploadBox";
 import TransactionTable from "@/components/TransactionTable";
 
@@ -15,7 +14,6 @@ export default function Home() {
     transactions,
     addTransactions,
     updateTransaction,
-    saveToCSV,
     addNewRow,
     deleteRow,
   } = useTransactionViewModel();
@@ -64,9 +62,6 @@ export default function Home() {
                 addNewRow={addNewRow}
                 deleteRow={deleteRow}
               />
-              <Button onClick={saveToCSV} className="mt-4">
-                Save to CSV
-              </Button>
             </div>
           </div>
         )}
