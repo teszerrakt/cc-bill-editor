@@ -51,7 +51,7 @@ export function useTransactionViewModel() {
   const addNewRow = () => {
     setTransactions((old) => [
       ...old,
-      { date: "", bank: "", category: "", amount: 0 },
+      { date: "", bank: "", category: "", description: "", amount: 0 },
     ]);
   };
 

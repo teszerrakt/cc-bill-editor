@@ -3,4 +3,5 @@ export interface Transaction {
   bank: string;
   category: string;
   amount: number;
+  description: string;
 }

@@ -38,7 +38,6 @@ interface TransactionTableProps {
 export default function TransactionTable({
   transactions,
   updateTransaction,
-  addNewRow,
   deleteRow,
 }: TransactionTableProps) {
   const columnHelper = createColumnHelper<Transaction>();
@@ -51,6 +50,17 @@ export default function TransactionTable({
           defaultValue={info.getValue()}
           onChange={(e) =>
             updateTransaction(info.row.index, "date", e.target.value)
+          }
+        />
+      ),
+    }),
+    columnHelper.accessor("description", {
+      header: "Description",
+      cell: (info) => (
+        <Input
+          defaultValue={info.getValue()}
+          onChange={(e) =>
+            updateTransaction(info.row.index, "description", e.target.value)
           }
         />
       ),
@@ -113,6 +123,16 @@ export default function TransactionTable({
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const totalExpenses = transactions.reduce(
+    (total, transaction) => total + transaction.amount,
+    0
+  );
+
+  const formattedTotalExpenses = new Intl.NumberFormat("en-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(totalExpenses);
+
   return (
     <div>
       <Table>
@@ -142,12 +162,6 @@ export default function TransactionTable({
           ))}
         </TableBody>
       </Table>
-
-      <Separator />
-
-      <Button className="w-full mt-4" onClick={addNewRow} variant={"outline"}>
-        Add New Row
-      </Button>
     </div>
   );
 }
