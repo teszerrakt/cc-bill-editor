@@ -3,8 +3,15 @@
 import { useState } from "react";
 
 // Components
+import { Button } from "@/components/ui/button";
 import UploadArea from "@/components/UploadBox";
 import TransactionTable from "@/components/TransactionTable";
+
+// Icons
+import { LoaderPinwheel } from "lucide-react";
+
+// Models
+import { FormattedBilling } from "@/lib/pdf-parser/types";
 
 // View Models
 import { useTransactionViewModel } from "@/view-models/TransactionViewModel";
@@ -12,9 +19,6 @@ import { Separator } from "@/components/ui/separator";
 
 // Utils
 import { cn } from "@/lib/utils";
-import { FormattedBilling } from "@/lib/pdf-parser/types";
-import { LoaderPinwheel } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
