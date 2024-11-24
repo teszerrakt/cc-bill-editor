@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
+  // TODO: Move this to a view model
   const [base64PDF, setBase64PDF] = useState<string | null>(null);
 
   const {
@@ -32,6 +33,7 @@ export default function Home() {
     deleteRow,
   } = useTransactionViewModel();
 
+  // TODO: Move this to a view model
   const totalExpenses = transactions.reduce(
     (total, transaction) => total + transaction.amount,
     0
