@@ -133,7 +133,6 @@ export default function Home() {
                 onClick={() => {
                   addNewRow();
                   const table = document.getElementById("trx-table");
-                  console.log("table", table?.scrollHeight);
 
                   table?.scrollTo({
                     top: table.scrollHeight + 200,
