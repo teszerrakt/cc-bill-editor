@@ -123,16 +123,6 @@ export default function TransactionTable({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const totalExpenses = transactions.reduce(
-    (total, transaction) => total + transaction.amount,
-    0
-  );
-
-  const formattedTotalExpenses = new Intl.NumberFormat("en-ID", {
-    style: "currency",
-    currency: "IDR",
-  }).format(totalExpenses);
-
   return (
     <div>
       <Table>

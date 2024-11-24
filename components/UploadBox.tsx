@@ -1,5 +1,5 @@
 import { useDropzone } from "react-dropzone";
-import { Upload } from "lucide-react";
+import { FileUp } from "lucide-react";
 
 interface UploadAreaProps {
   onFileUpload: (file: File) => void;
@@ -29,7 +29,7 @@ export default function UploadArea({ onFileUpload }: UploadAreaProps) {
       }`}
     >
       <input {...getInputProps()} />
-      <Upload className="mb-4 text-primary" size={64} />
+      <FileUp className="mb-4 text-primary" size={64} />
       <p className="text-sm text-center text-muted-foreground">
         Drop PDF or click to upload
       </p>

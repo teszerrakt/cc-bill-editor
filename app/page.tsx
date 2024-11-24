@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
+  const [base64PDF, setBase64PDF] = useState<string | null>(null);
 
   const {
     transactions,
@@ -37,9 +38,22 @@ export default function Home() {
     currency: "IDR",
   }).format(totalExpenses);
 
+  const fileToBase64 = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const handleFileUpload = async (file: File) => {
+    setBase64PDF(null);
+
     const formData = new FormData();
     formData.append("file", file);
+
+    const base64 = await fileToBase64(file);
 
     try {
       setIsLoading(true);
@@ -53,6 +67,8 @@ export default function Home() {
       }
 
       const data = await response.json();
+
+      setBase64PDF(base64);
 
       addTransactions(
         data.transactions.map((t: FormattedBilling) => ({
@@ -84,14 +100,21 @@ export default function Home() {
   return (
     <div className="px-4 bg-background text-foreground">
       <div className="flex w-full gap-4">
-        <div
-          className={cn("flex h-screen justify-center items-center", {
-            "w-full": !transactions?.length,
-            "w-1/3": transactions?.length,
-          })}
-        >
-          <UploadArea onFileUpload={handleFileUpload} />
-        </div>
+        {base64PDF && (
+          <div className="w-1/3">
+            <iframe src={base64PDF} className="object-contain w-full h-full" />
+          </div>
+        )}
+        {!base64PDF && (
+          <div
+            className={cn("flex h-screen justify-center items-center", {
+              "w-full": !transactions?.length,
+              "w-1/3": transactions?.length,
+            })}
+          >
+            <UploadArea onFileUpload={handleFileUpload} />
+          </div>
+        )}
 
         {transactions?.length > 0 && (
           <div className="flex gap-4 p-4 max-h-[100vh]">
