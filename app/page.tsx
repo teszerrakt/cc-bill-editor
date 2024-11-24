@@ -35,7 +35,7 @@ export default function Home() {
 
   // TODO: Move this to a view model
   const totalExpenses = transactions.reduce(
-    (total, transaction) => total + transaction.amount,
+    (total, transaction) => total + Number(transaction.amount),
     0
   );
 

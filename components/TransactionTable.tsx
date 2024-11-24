@@ -3,12 +3,12 @@ import {
   getCoreRowModel,
   flexRender,
   createColumnHelper,
+  ColumnDef,
 } from "@tanstack/react-table";
 
 // Components
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -23,6 +23,7 @@ import { Trash2 } from "lucide-react";
 
 // Models
 import { Transaction } from "@/models/Transaction";
+import { useMemo, useState } from "react";
 
 interface TransactionTableProps {
   transactions: Transaction[];
@@ -42,85 +43,49 @@ export default function TransactionTable({
 }: TransactionTableProps) {
   const columnHelper = createColumnHelper<Transaction>();
 
-  const columns = [
-    columnHelper.accessor("date", {
-      header: "Date",
-      cell: (info) => (
-        <Input
-          defaultValue={info.getValue()}
-          onChange={(e) =>
-            updateTransaction(info.row.index, "date", e.target.value)
-          }
-        />
-      ),
-    }),
-    columnHelper.accessor("description", {
-      header: "Description",
-      cell: (info) => (
-        <Input
-          defaultValue={info.getValue()}
-          onChange={(e) =>
-            updateTransaction(info.row.index, "description", e.target.value)
-          }
-        />
-      ),
-    }),
-    columnHelper.accessor("bank", {
-      header: "Bank",
-      cell: (info) => (
-        <Input
-          defaultValue={info.getValue()}
-          onChange={(e) =>
-            updateTransaction(info.row.index, "bank", e.target.value)
-          }
-        />
-      ),
-    }),
-    columnHelper.accessor("category", {
-      header: "Category",
-      cell: (info) => (
-        <Input
-          defaultValue={info.getValue()}
-          onChange={(e) =>
-            updateTransaction(info.row.index, "category", e.target.value)
-          }
-        />
-      ),
-    }),
-    columnHelper.accessor("amount", {
-      header: "Amount",
-      cell: (info) => (
-        <Input
-          type="number"
-          defaultValue={info.getValue()}
-          onChange={(e) =>
-            updateTransaction(
-              info.row.index,
-              "amount",
-              parseFloat(e.target.value)
-            )
-          }
-        />
-      ),
-    }),
-    columnHelper.display({
-      id: "actions",
-      cell: (info) => (
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => deleteRow(info.row.index)}
-        >
-          <Trash2 className="w-4 h-4" />
-        </Button>
-      ),
-    }),
-  ];
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("date", {
+        header: "Date",
+      }),
+      columnHelper.accessor("description", {
+        header: "Description",
+      }),
+      columnHelper.accessor("bank", {
+        header: "Bank",
+      }),
+      columnHelper.accessor("category", {
+        header: "Category",
+      }),
+      columnHelper.accessor("amount", {
+        header: "Amount",
+      }),
+      columnHelper.display({
+        id: "actions",
+        cell: (info) => (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => deleteRow(info.row.index)}
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        ),
+      }),
+    ],
+    [transactions]
+  );
 
   const table = useReactTable({
     data: transactions,
     columns,
+    defaultColumn,
     getCoreRowModel: getCoreRowModel(),
+    meta: {
+      updateData: (rowIndex: number, columnId: string, value: string) => {
+        updateTransaction(rowIndex, columnId as keyof Transaction, value);
+      },
+    },
   });
 
   return (
@@ -155,3 +120,25 @@ export default function TransactionTable({
     </div>
   );
 }
+
+const defaultColumn: Partial<ColumnDef<Transaction>> = {
+  cell: ({ getValue, row: { index }, column: { id }, table }) => {
+    const initialValue = getValue();
+    // We need to keep and update the state of the cell normally
+    const [value, setValue] = useState(initialValue);
+
+    // When the input is blurred, we'll call our table meta's updateData function
+    const onBlur = () => {
+      // @ts-expect-error
+      table.options.meta?.updateData(index, id, value);
+    };
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
+    };
+
+    return (
+      <Input value={value as string} onChange={onChange} onBlur={onBlur} />
+    );
+  },
+};
