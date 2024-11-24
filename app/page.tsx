@@ -53,6 +53,7 @@ export default function Home() {
     });
   };
 
+  // TODO: Move this to a view model
   const handleFileUpload = async (file: File) => {
     setBase64PDF(null);
 
@@ -86,6 +87,7 @@ export default function Home() {
         }))
       );
     } catch (error) {
+      // TODO: Use better component for error handling
       console.error("Error uploading file:", error);
       alert("Failed to upload and parse the file. Please try again.");
     } finally {
