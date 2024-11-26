@@ -13,10 +13,7 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    console.log("Parsing PDF...", buffer);
-
     const transactions = await parsePDF(buffer, "JENIUS");
-    // const transactions = { transactions: [] };
 
     return NextResponse.json({ transactions });
   } catch (error) {
