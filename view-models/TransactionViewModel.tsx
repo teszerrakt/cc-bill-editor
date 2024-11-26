@@ -27,11 +27,19 @@ export function useTransactionViewModel() {
   };
 
   const saveToCSV = () => {
-    const headers = ["Date", "Bank", "Category", "Amount"];
+    const headers = ["Date", "Description", "Bank", "Category", "Amount"];
+    const wrapWithQuotes = (value: string) => `"${value}"`;
+
     const csvContent = [
       headers.join(","),
       ...transactions.map((row) =>
-        [row.date, row.bank, row.category, row.amount].join(",")
+        [
+          row.date,
+          wrapWithQuotes(row.description),
+          wrapWithQuotes(row.bank),
+          wrapWithQuotes(row.category),
+          row.amount,
+        ].join(",")
       ),
     ].join("\n");
 

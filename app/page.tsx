@@ -31,6 +31,7 @@ export default function Home() {
     updateTransaction,
     addNewRow,
     deleteRow,
+    saveToCSV,
   } = useTransactionViewModel();
 
   // TODO: Move this to a view model
@@ -137,20 +138,25 @@ export default function Home() {
             </div>
             <div className="fixed flex items-center justify-between w-2/3 h-16 px-4 mx-auto border rounded-md bottom-4 right-4 bg-background border-muted">
               <div>Total Expenses: {formattedTotalExpenses}</div>
-              <Button
-                onClick={() => {
-                  addNewRow();
-                  const table = document.getElementById("trx-table");
+              <div className="flex gap-2">
+                <Button onClick={saveToCSV} variant={"secondary"}>
+                  Export to CSV
+                </Button>
+                <Button
+                  onClick={() => {
+                    addNewRow();
+                    const table = document.getElementById("trx-table");
 
-                  table?.scrollTo({
-                    top: table.scrollHeight + 200,
-                    behavior: "smooth",
-                  });
-                }}
-                variant={"outline"}
-              >
-                Add New Row
-              </Button>
+                    table?.scrollTo({
+                      top: table.scrollHeight + 200,
+                      behavior: "smooth",
+                    });
+                  }}
+                  variant={"outline"}
+                >
+                  Add New Row
+                </Button>
+              </div>
             </div>
           </div>
         )}
