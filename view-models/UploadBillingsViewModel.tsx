@@ -46,6 +46,10 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
 
       const data = await response.json();
 
+      if (!data.transactions || data.transactions.length === 0) {
+        throw new Error("No transactions found in the PDF");
+      }
+
       setBase64PDF(base64);
 
       onSuccessfulUpload(data.transactions);
@@ -53,6 +57,7 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
       // TODO: Use better component for error handling
       console.error("Error uploading file:", error);
       alert("Failed to upload and parse the file. Please try again.");
+      setBase64PDF(undefined);
     } finally {
       setIsLoading(false);
     }

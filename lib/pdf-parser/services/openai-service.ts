@@ -21,7 +21,7 @@ export async function formatBillingsWithAI(
 
   try {
     const response = await openAI.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "o1-mini",
       messages: [
         {
           role: "user",
