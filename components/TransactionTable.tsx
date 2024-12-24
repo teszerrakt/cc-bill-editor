@@ -1,13 +1,12 @@
+import { useMemo } from "react";
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
   createColumnHelper,
-  ColumnDef,
 } from "@tanstack/react-table";
 
 // Components
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -17,22 +16,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import SelectCategory from "./SelectCategory";
 
 // Icons
 import { Trash2 } from "lucide-react";
 
 // Models
 import { Transaction } from "@/models/Transaction";
-import { useMemo, useState } from "react";
 
 interface TransactionTableProps {
   transactions: Transaction[];
   updateTransaction: (
     index: number,
     field: keyof Transaction,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any
   ) => void;
-  addNewRow: () => void;
   deleteRow: (index: number) => void;
 }
 
@@ -56,6 +55,14 @@ export default function TransactionTable({
       }),
       columnHelper.accessor("category", {
         header: "Category",
+        cell: (info) => (
+          <SelectCategory
+            value={info.row.original.category}
+            onSelectCategory={(category) =>
+              updateTransaction(info.row.index, "category", category)
+            }
+          />
+        ),
       }),
       columnHelper.accessor("amount", {
         header: "Amount",
@@ -73,19 +80,13 @@ export default function TransactionTable({
         ),
       }),
     ],
-    [transactions]
+    [columnHelper, deleteRow, updateTransaction]
   );
 
   const table = useReactTable({
     data: transactions,
     columns,
-    defaultColumn,
     getCoreRowModel: getCoreRowModel(),
-    meta: {
-      updateData: (rowIndex: number, columnId: string, value: string) => {
-        updateTransaction(rowIndex, columnId as keyof Transaction, value);
-      },
-    },
   });
 
   return (
@@ -120,25 +121,3 @@ export default function TransactionTable({
     </div>
   );
 }
-
-const defaultColumn: Partial<ColumnDef<Transaction>> = {
-  cell: ({ getValue, row: { index }, column: { id }, table }) => {
-    const initialValue = getValue();
-    // We need to keep and update the state of the cell normally
-    const [value, setValue] = useState(initialValue);
-
-    // When the input is blurred, we'll call our table meta's updateData function
-    const onBlur = () => {
-      // @ts-expect-error
-      table.options.meta?.updateData(index, id, value);
-    };
-
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(e.target.value);
-    };
-
-    return (
-      <Input value={value as string} onChange={onChange} onBlur={onBlur} />
-    );
-  },
-};

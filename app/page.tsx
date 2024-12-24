@@ -105,7 +105,6 @@ export default function Home() {
               <TransactionTable
                 transactions={transactions}
                 updateTransaction={updateTransaction}
-                addNewRow={addNewRow}
                 deleteRow={deleteRow}
               />
             </div>
