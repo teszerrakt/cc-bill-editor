@@ -9,9 +9,15 @@ const openAI = new OpenAI({
 
 export async function formatBillingsWithAI(
   billings: string[],
-  issuingBanks: string
+  issuingBanks: string,
+  additionalQueries?: string[]
 ): Promise<FormattedBilling[] | undefined> {
   const formattedBillings = billings.join("\n");
+
+  const mappedAdditionalQueries = (additionalQueries ?? []).map((query) => ({
+    role: "user" as const,
+    content: query,
+  }));
 
   try {
     const response = await openAI.chat.completions.create({
@@ -41,8 +47,14 @@ export async function formatBillingsWithAI(
         },
         {
           role: "user",
-          content: "amount is in JavaScript readable number format.",
+          content: "amount is in JavaScript readable number format",
         },
+        {
+          role: "user",
+          content:
+            "remove the currency symbol (e.g. IDR, USD, $, etc) and any other non-numeric characters from the amount.",
+        },
+        ...mappedAdditionalQueries,
         { role: "user", content: formattedBillings },
       ],
     });
@@ -54,7 +66,7 @@ export async function formatBillingsWithAI(
         return {
           transactionDate,
           description: description?.trim(),
-          amount: parseFloat(amount),
+          amount: Number(amount),
           issuingBank: issuingBanks,
         };
       })

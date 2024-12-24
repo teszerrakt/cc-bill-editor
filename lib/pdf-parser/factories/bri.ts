@@ -29,10 +29,16 @@ export const factory: BillingFactoryFn = (pdfText) => {
     /(\d{2}-\d{2}-\d{4})(\d{2}-\d{2}-\d{4})(.*)([A-Z]{3})(.*)/;
 
   // Filter out the lines that match the billing pattern
-  const billingLines = lines.filter((line) => billingPattern.test(line));
+  const billingLines = lines.filter(
+    // TODO: Convert the CR into regex
+    (line) => billingPattern.test(line) && !line.endsWith("CR")
+  );
 
   return {
     billings: billingLines,
-    additionalQueries: [],
+    additionalQueries: [
+      "If the currency is in IDR, the currency is separated by `.`, don't treat it as decimal point",
+      "If you see IDR IDR0.000.00 ignore them, the amount lies behind that",
+    ],
   };
 };

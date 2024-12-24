@@ -9,8 +9,15 @@ import { formatBillingsWithAI } from "./services/openai-service";
 export async function parsePDF(pdfBuffer: Buffer, issuingBank: IssuingBanks) {
   const pdfText = await pdf(pdfBuffer);
 
-  const { billings } = billingFactory[issuingBank](pdfText.text);
-  const formattedBillings = formatBillingsWithAI(billings, issuingBank);
+  const { billings, additionalQueries } = billingFactory[issuingBank](
+    pdfText.text
+  );
+
+  const formattedBillings = formatBillingsWithAI(
+    billings,
+    issuingBank,
+    additionalQueries
+  );
 
   return formattedBillings;
 }

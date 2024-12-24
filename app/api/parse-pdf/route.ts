@@ -13,6 +13,7 @@ export async function POST(req: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
+    // TODO: Get bank from request body
     const transactions = await parsePDF(buffer, "JENIUS");
 
     return NextResponse.json({ transactions });
