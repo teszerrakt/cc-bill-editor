@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
-
 // Components
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import UploadArea from "@/components/UploadBox";
 import TransactionTable from "@/components/TransactionTable";
+import SelectBank from "@/components/SelectBank";
 
 // Icons
 import { LoaderPinwheel } from "lucide-react";
@@ -16,15 +15,12 @@ import { FormattedBilling } from "@/lib/pdf-parser/types";
 
 // View Models
 import { useTransactionViewModel } from "@/view-models/TransactionViewModel";
+import { useUploadBillingsViewModal } from "@/view-models/UploadBillingsViewModel";
 
 // Utils
 import { cn } from "@/lib/utils";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
-  // TODO: Move this to a view model
-  const [base64PDF, setBase64PDF] = useState<string | null>(null);
-
   const {
     transactions,
     addTransactions,
@@ -33,6 +29,27 @@ export default function Home() {
     deleteRow,
     saveToCSV,
   } = useTransactionViewModel();
+
+  const {
+    bankList,
+    base64PDF,
+    issuingBank,
+    isLoading,
+    onFileUpload,
+    onSelectBank,
+  } = useUploadBillingsViewModal({
+    onSuccessfulUpload: (transactions) => {
+      addTransactions(
+        transactions.map((t: FormattedBilling) => ({
+          date: t.transactionDate,
+          bank: t.issuingBank,
+          category: "",
+          amount: t.amount,
+          description: t.description,
+        }))
+      );
+    },
+  });
 
   // TODO: Move this to a view model
   const totalExpenses = transactions.reduce(
@@ -44,57 +61,6 @@ export default function Home() {
     style: "currency",
     currency: "IDR",
   }).format(totalExpenses);
-
-  const fileToBase64 = (file: File) => {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
-  // TODO: Move this to a view model
-  const handleFileUpload = async (file: File) => {
-    setBase64PDF(null);
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const base64 = await fileToBase64(file);
-
-    try {
-      setIsLoading(true);
-      const response = await fetch("/api/parse-pdf", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to parse PDF");
-      }
-
-      const data = await response.json();
-
-      setBase64PDF(base64);
-
-      addTransactions(
-        data.transactions.map((t: FormattedBilling) => ({
-          date: t.transactionDate,
-          bank: t.issuingBank,
-          category: "",
-          amount: t.amount,
-          description: t.description,
-        }))
-      );
-    } catch (error) {
-      // TODO: Use better component for error handling
-      console.error("Error uploading file:", error);
-      alert("Failed to upload and parse the file. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   if (isLoading) {
     return (
@@ -121,7 +87,14 @@ export default function Home() {
               "w-1/3": transactions?.length,
             })}
           >
-            <UploadArea onFileUpload={handleFileUpload} />
+            <div className="flex flex-col gap-4">
+              <SelectBank
+                bankList={bankList}
+                issuingBank={issuingBank}
+                onSelectBank={onSelectBank}
+              />
+              <UploadArea onFileUpload={onFileUpload} />
+            </div>
           </div>
         )}
 
