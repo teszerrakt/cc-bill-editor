@@ -112,16 +112,16 @@ export default function Home() {
         )}
 
         {transactions?.length > 0 && (
-          <div className="flex gap-4 p-4 max-h-[100vh]">
+          <div className="flex gap-4 p-4 max-h-[100vh] w-2/3">
             <Separator orientation="vertical" />
-            <div id="trx-table" className="pb-16 overflow-y-scroll">
+            <div id="trx-table" className="pb-16 overflow-y-scroll w-full">
               <TransactionTable
                 transactions={transactions}
                 updateTransaction={updateTransaction}
                 deleteRow={deleteRow}
               />
             </div>
-            <div className="fixed flex items-center justify-between w-2/3 h-16 px-4 border rounded-md bottom-4 right-4 bg-background border-muted">
+            <div className="fixed flex items-center justify-between w-2/3 h-16 px-4 border rounded-md bottom-4 right-6 bg-background border-muted">
               <div>Total Expenses: {formattedTotalExpenses}</div>
               <div className="flex gap-2">
                 <Button onClick={saveToCSV} variant={"secondary"}>
