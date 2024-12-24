@@ -29,6 +29,7 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("bank", bank as string);
 
     const base64 = await fileToBase64(file);
 
