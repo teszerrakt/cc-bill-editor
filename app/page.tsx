@@ -8,7 +8,7 @@ import TransactionTable from "@/components/TransactionTable";
 import SelectBank from "@/components/SelectBank";
 
 // Icons
-import { LoaderPinwheel } from "lucide-react";
+import { LoaderPinwheel, ArrowLeft } from "lucide-react";
 
 // Models
 import { FormattedBilling } from "@/lib/pdf-parser/types";
@@ -28,6 +28,7 @@ export default function Home() {
     addNewRow,
     deleteRow,
     saveToCSV,
+    resetTransactions,
   } = useTransactionViewModel();
 
   const {
@@ -35,6 +36,7 @@ export default function Home() {
     base64PDF,
     issuingBank,
     isLoading,
+    onBase64Change,
     onFileUpload,
     onSelectBank,
   } = useUploadBillingsViewModal({
@@ -62,6 +64,11 @@ export default function Home() {
     currency: "IDR",
   }).format(totalExpenses);
 
+  const handleBack = () => {
+    onBase64Change(undefined);
+    resetTransactions();
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -77,6 +84,12 @@ export default function Home() {
       <div className="flex w-full gap-4">
         {base64PDF && (
           <div className="w-1/3">
+            <div className="flex py-4 gap-4 items-center">
+              <Button variant={"outline"} onClick={handleBack}>
+                <ArrowLeft /> Back
+              </Button>
+              {issuingBank} Billings
+            </div>
             <iframe src={base64PDF} className="object-contain w-full h-full" />
           </div>
         )}
@@ -108,7 +121,7 @@ export default function Home() {
                 deleteRow={deleteRow}
               />
             </div>
-            <div className="fixed flex items-center justify-between w-2/3 h-16 px-4 mx-auto border rounded-md bottom-4 right-4 bg-background border-muted">
+            <div className="fixed flex items-center justify-between w-2/3 h-16 px-4 border rounded-md bottom-4 right-4 bg-background border-muted">
               <div>Total Expenses: {formattedTotalExpenses}</div>
               <div className="flex gap-2">
                 <Button onClick={saveToCSV} variant={"secondary"}>

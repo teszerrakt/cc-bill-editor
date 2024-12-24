@@ -11,6 +11,7 @@ export function useTransactionViewModel() {
   const updateTransaction = (
     index: number,
     field: keyof Transaction,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     value: any
   ) => {
     setTransactions((old) =>
@@ -67,10 +68,15 @@ export function useTransactionViewModel() {
     setTransactions((old) => old.filter((_, i) => i !== index));
   };
 
+  const resetTransactions = () => {
+    setTransactions([]);
+  };
+
   return {
     transactions,
     addTransactions,
     updateTransaction,
+    resetTransactions,
     saveToCSV,
     addNewRow,
     deleteRow,

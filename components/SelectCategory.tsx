@@ -26,7 +26,7 @@ export default function SelectCategory({ onSelectCategory, value }: Props) {
   return (
     <Select defaultValue={value} onValueChange={onSelectCategory}>
       <SelectTrigger>
-        <SelectValue placeholder="Select Bank" />
+        <SelectValue placeholder="Select Category" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

@@ -70,5 +70,6 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
     issuingBank: bank,
     onFileUpload: handleFileUpload,
     onSelectBank: setBank,
+    onBase64Change: setBase64PDF,
   };
 }
