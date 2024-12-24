@@ -14,6 +14,7 @@ const CATEGORIES = [
   "Entertainment",
   "Health",
   "Subscription",
+  "Rent",
 ];
 
 type Props = {
@@ -29,7 +30,7 @@ export default function SelectCategory({ onSelectCategory, value }: Props) {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {CATEGORIES.map((category) => (
+          {CATEGORIES.sort().map((category) => (
             <SelectItem key={category} value={category}>
               {category}
             </SelectItem>
