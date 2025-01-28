@@ -104,13 +104,12 @@ export default function Home() {
           </div>
         )}
         {!base64PDF && (
-          <div
-            className={cn("flex h-screen justify-center items-center", {
-              "w-full": !transactions?.length,
-              "w-1/3": transactions?.length,
-            })}
-          >
-            <div className="flex flex-col gap-4">
+          <div className={cn("flex mx-auto justify-center w-[500px]")}>
+            <div className="flex flex-col gap-4 py-8 px-12 border h-fit rounded-lg mt-40">
+              <p className="mb-4 text-center">
+                Transform your credit card bills into an organized table and
+                downloadable CSV.
+              </p>
               <Dropdown<IssuingBanks>
                 options={bankList}
                 value={issuingBank}
@@ -130,7 +129,13 @@ export default function Home() {
         )}
 
         {transactions?.length > 0 && (
-          <div className="flex gap-4 p-4 max-h-[100vh] w-2/3">
+          <div
+            className="flex gap-4 p-4 w-2/3"
+            style={{
+              // 65px is the height of the header
+              maxHeight: "calc(100vh - 65px)",
+            }}
+          >
             <Separator orientation="vertical" />
             <div id="trx-table" className="pb-16 overflow-y-scroll w-full">
               <TransactionTable

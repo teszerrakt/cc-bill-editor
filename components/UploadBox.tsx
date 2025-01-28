@@ -22,7 +22,7 @@ export default function UploadArea({ onFileUpload }: UploadAreaProps) {
   return (
     <div
       {...getRootProps()}
-      className={`w-64 h-64 border-2 border-dashed rounded-lg p-4 flex flex-col justify-center items-center cursor-pointer transition-colors duration-300 ${
+      className={`w-full h-64 border-2 border-dashed rounded-lg p-4 flex flex-col justify-center items-center cursor-pointer transition-colors duration-300 ${
         isDragActive
           ? "border-primary bg-primary/10"
           : "border-border hover:border-primary hover:bg-primary/5"
