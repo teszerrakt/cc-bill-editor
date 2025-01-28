@@ -15,6 +15,7 @@ const CATEGORIES = [
   "Health",
   "Subscription",
   "Rent",
+  "Electricity",
 ];
 
 type Props = {

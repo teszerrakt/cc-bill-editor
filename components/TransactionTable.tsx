@@ -42,6 +42,13 @@ export default function TransactionTable({
 }: TransactionTableProps) {
   const columnHelper = createColumnHelper<Transaction>();
 
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en", {
+      style: "decimal",
+      currency: "IDR",
+    }).format(value);
+  };
+
   const columns = useMemo(
     () => [
       columnHelper.accessor("date", {
@@ -66,6 +73,7 @@ export default function TransactionTable({
       }),
       columnHelper.accessor("amount", {
         header: "Amount",
+        cell: (info) => <>{formatCurrency(info.row.original.amount)}</>,
       }),
       columnHelper.display({
         id: "actions",

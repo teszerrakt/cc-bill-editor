@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // Types
-import type { FormattedBilling } from "@/lib/pdf-parser/types";
+import type { FormattedBilling, SupportedModel } from "@/lib/pdf-parser/types";
 import type { IssuingBanks } from "@/lib/pdf-parser/factories";
 
 type Params = {
@@ -9,11 +9,19 @@ type Params = {
 };
 
 const BANK_LIST: IssuingBanks[] = ["BRI", "JENIUS"];
+const MODEL_LIST: SupportedModel[] = [
+  "gpt-4o",
+  "gpt-4",
+  "gpt-4-turbo",
+  "gpt-3.5-turbo",
+  "o1-mini",
+];
 
 export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
   const [bank, setBank] = useState<IssuingBanks | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [base64PDF, setBase64PDF] = useState<string | undefined>();
+  const [model, setModel] = useState<SupportedModel | undefined>();
 
   const fileToBase64 = (file: File) => {
     return new Promise<string>((resolve, reject) => {
@@ -30,6 +38,7 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("bank", bank as string);
+    formData.append("model", model as string);
 
     const base64 = await fileToBase64(file);
 
@@ -68,8 +77,11 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
     base64PDF,
     bankList: BANK_LIST,
     issuingBank: bank,
+    aiModel: model,
+    modelList: MODEL_LIST,
     onFileUpload: handleFileUpload,
     onSelectBank: setBank,
     onBase64Change: setBase64PDF,
+    onSelectModel: setModel,
   };
 }

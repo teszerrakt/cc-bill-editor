@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
 // Types
-import type { FormattedBilling } from "./../types";
+import type { FormattedBilling, SupportedModel } from "./../types";
 
 const openAI = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -10,7 +10,8 @@ const openAI = new OpenAI({
 export async function formatBillingsWithAI(
   billings: string[],
   issuingBanks: string,
-  additionalQueries?: string[]
+  additionalQueries?: string[],
+  model: SupportedModel = "gpt-4o"
 ): Promise<FormattedBilling[] | undefined> {
   const formattedBillings = billings.join("\n");
 
@@ -21,7 +22,7 @@ export async function formatBillingsWithAI(
 
   try {
     const response = await openAI.chat.completions.create({
-      model: "o1-mini",
+      model: model,
       messages: [
         {
           role: "user",

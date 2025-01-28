@@ -1,17 +1,20 @@
 "use client";
 
+// Constants
+import FEATURE_FLAGS from "@/constants/featureFlags";
+
 // Components
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import UploadArea from "@/components/UploadBox";
 import TransactionTable from "@/components/TransactionTable";
-import SelectBank from "@/components/SelectBank";
+import Dropdown from "@/components/Dropdown";
 
 // Icons
 import { LoaderPinwheel, ArrowLeft } from "lucide-react";
 
 // Models
-import { FormattedBilling } from "@/lib/pdf-parser/types";
+import { FormattedBilling, SupportedModel } from "@/lib/pdf-parser/types";
 
 // View Models
 import { useTransactionViewModel } from "@/view-models/TransactionViewModel";
@@ -19,6 +22,9 @@ import { useUploadBillingsViewModal } from "@/view-models/UploadBillingsViewMode
 
 // Utils
 import { cn } from "@/lib/utils";
+
+// Types
+import { IssuingBanks } from "@/lib/pdf-parser/factories";
 
 export default function Home() {
   const {
@@ -32,6 +38,8 @@ export default function Home() {
   } = useTransactionViewModel();
 
   const {
+    aiModel,
+    modelList,
     bankList,
     base64PDF,
     issuingBank,
@@ -39,6 +47,7 @@ export default function Home() {
     onBase64Change,
     onFileUpload,
     onSelectBank,
+    onSelectModel,
   } = useUploadBillingsViewModal({
     onSuccessfulUpload: (transactions) => {
       addTransactions(
@@ -101,11 +110,19 @@ export default function Home() {
             })}
           >
             <div className="flex flex-col gap-4">
-              <SelectBank
-                bankList={bankList}
-                issuingBank={issuingBank}
-                onSelectBank={onSelectBank}
+              <Dropdown<IssuingBanks>
+                options={bankList}
+                value={issuingBank}
+                onSelectItem={onSelectBank}
+                placeholder="Select Bank"
               />
+              <Dropdown<SupportedModel>
+                options={modelList}
+                value={aiModel}
+                onSelectItem={onSelectModel}
+                placeholder="Select Model"
+              />
+
               <UploadArea onFileUpload={onFileUpload} />
             </div>
           </div>
@@ -127,20 +144,22 @@ export default function Home() {
                 <Button onClick={saveToCSV} variant={"secondary"}>
                   Export to CSV
                 </Button>
-                <Button
-                  onClick={() => {
-                    addNewRow();
-                    const table = document.getElementById("trx-table");
+                {FEATURE_FLAGS.TABLE_DIRECT_EDIT_ENABLED && (
+                  <Button
+                    onClick={() => {
+                      addNewRow();
+                      const table = document.getElementById("trx-table");
 
-                    table?.scrollTo({
-                      top: table.scrollHeight + 200,
-                      behavior: "smooth",
-                    });
-                  }}
-                  variant={"outline"}
-                >
-                  Add New Row
-                </Button>
+                      table?.scrollTo({
+                        top: table.scrollHeight + 200,
+                        behavior: "smooth",
+                      });
+                    }}
+                    variant={"outline"}
+                  >
+                    Add New Row
+                  </Button>
+                )}
               </div>
             </div>
           </div>

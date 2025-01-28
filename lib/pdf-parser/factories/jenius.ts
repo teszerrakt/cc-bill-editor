@@ -59,6 +59,9 @@ export const factory: BillingFactoryFn = (pdfText) => {
 
   return {
     billings: billingLines,
-    additionalQueries: [],
+    additionalQueries: [
+      "Ignore the second part of d{2}\t[A-Z]{3}\td{4} as it is the posting date.",
+      "Remove entries that contain CR at the end of the text.",
+    ],
   };
 };
