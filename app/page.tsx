@@ -11,7 +11,7 @@ import TransactionTable from "@/components/TransactionTable";
 import Dropdown from "@/components/Dropdown";
 
 // Icons
-import { LoaderPinwheel, ArrowLeft } from "lucide-react";
+import { ArrowLeft, LoaderCircle } from "lucide-react";
 
 // Models
 import { FormattedBilling, SupportedModel } from "@/lib/pdf-parser/types";
@@ -80,10 +80,11 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center h-screen gap-4">
         <div className="animate-spin">
-          <LoaderPinwheel />
+          <LoaderCircle className="w-10 h-10" />
         </div>
+        <div className="animate-pulse">Analyzing your billings...</div>
       </div>
     );
   }
