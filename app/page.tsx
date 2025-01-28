@@ -80,7 +80,12 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen gap-4">
+      <div
+        className="flex flex-col items-center justify-center gap-4"
+        style={{
+          height: "calc(100vh - 65px)",
+        }}
+      >
         <div className="animate-spin">
           <LoaderCircle className="w-10 h-10" />
         </div>

@@ -8,7 +8,7 @@ type Params = {
   onSuccessfulUpload: (transactions: FormattedBilling[]) => void;
 };
 
-const BANK_LIST: IssuingBanks[] = ["BRI", "JENIUS"];
+const BANK_LIST: IssuingBanks[] = ["BRI", "JENIUS", "OTHER"];
 const MODEL_LIST: SupportedModel[] = [
   "gpt-4o",
   "gpt-4",
@@ -18,10 +18,10 @@ const MODEL_LIST: SupportedModel[] = [
 ];
 
 export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
-  const [bank, setBank] = useState<IssuingBanks | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [bank, setBank] = useState<IssuingBanks>("OTHER");
+  const [model, setModel] = useState<SupportedModel | undefined>("gpt-4o");
   const [base64PDF, setBase64PDF] = useState<string | undefined>();
-  const [model, setModel] = useState<SupportedModel | undefined>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fileToBase64 = (file: File) => {
     return new Promise<string>((resolve, reject) => {
