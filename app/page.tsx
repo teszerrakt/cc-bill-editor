@@ -124,11 +124,20 @@ export default function Home() {
 
         {base64PDF && (
           <div className="w-full md:w-1/3">
-            <div className="flex py-4 gap-4 items-center justify-between">
-              <Button variant={"outline"} onClick={handleBack}>
-                <ArrowLeft /> Back
+            <div className="flex py-4 items-center justify-between ">
+              <div className="flex gap-4 items-center ">
+                <Button variant={"outline"} onClick={handleBack}>
+                  <ArrowLeft /> Back
+                </Button>
+                {issuingBank} Billings
+              </div>
+              <Button
+                className="md:hidden"
+                onClick={saveToCSV}
+                variant={"secondary"}
+              >
+                Export to CSV
               </Button>
-              {issuingBank} Billings
             </div>
 
             <div className="text-center md:hidden py-4 border-b border-t">
