@@ -7,6 +7,8 @@ import { parsePDF } from "@/lib/pdf-parser";
 import type { IssuingBanks } from "@/lib/pdf-parser/factories";
 import type { SupportedModel } from "@/lib/pdf-parser/types";
 
+export const maxDuration = 60;
+
 export async function POST(req: Request) {
   const formData = await req.formData();
   const file = formData.get("file") as File;
