@@ -98,7 +98,9 @@ export default function Home() {
     <div className="px-4 bg-background text-foreground">
       <div className="flex flex-col md:flex-row w-full gap-4">
         {!base64PDF && (
-          <div className={cn("flex mx-auto justify-center w-[500px]")}>
+          <div
+            className={cn("flex mx-auto justify-center w-full md:w-[500px]")}
+          >
             <div className="flex flex-col gap-4 py-8 px-12 border h-fit rounded-lg mt-40">
               <p className="mb-4 text-center">
                 Transform your credit card bills into an organized table and
