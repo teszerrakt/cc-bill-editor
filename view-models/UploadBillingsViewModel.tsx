@@ -75,10 +75,10 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
   return {
     isLoading,
     base64PDF,
-    bankList: BANK_LIST,
+    bankList: BANK_LIST.sort(),
     issuingBank: bank,
     aiModel: model,
-    modelList: MODEL_LIST,
+    modelList: MODEL_LIST.sort(),
     onFileUpload: handleFileUpload,
     onSelectBank: setBank,
     onBase64Change: setBase64PDF,
