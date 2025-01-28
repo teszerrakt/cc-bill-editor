@@ -96,18 +96,7 @@ export default function Home() {
 
   return (
     <div className="px-4 bg-background text-foreground">
-      <div className="flex w-full gap-4">
-        {base64PDF && (
-          <div className="w-1/3">
-            <div className="flex py-4 gap-4 items-center">
-              <Button variant={"outline"} onClick={handleBack}>
-                <ArrowLeft /> Back
-              </Button>
-              {issuingBank} Billings
-            </div>
-            <iframe src={base64PDF} className="object-contain w-full h-full" />
-          </div>
-        )}
+      <div className="flex flex-col md:flex-row w-full gap-4">
         {!base64PDF && (
           <div className={cn("flex mx-auto justify-center w-[500px]")}>
             <div className="flex flex-col gap-4 py-8 px-12 border h-fit rounded-lg mt-40">
@@ -133,15 +122,36 @@ export default function Home() {
           </div>
         )}
 
+        {base64PDF && (
+          <div className="w-full md:w-1/3">
+            <div className="flex py-4 gap-4 items-center justify-between">
+              <Button variant={"outline"} onClick={handleBack}>
+                <ArrowLeft /> Back
+              </Button>
+              {issuingBank} Billings
+            </div>
+
+            <div className="text-center md:hidden py-4 border-b border-t">
+              Total Expenses: {formattedTotalExpenses}
+            </div>
+
+            <iframe
+              src={base64PDF}
+              className="hidden md:block object-contain w-full h-full"
+            />
+          </div>
+        )}
+
         {transactions?.length > 0 && (
           <div
-            className="flex gap-4 p-4 w-2/3"
+            className="flex gap-4 md:p-4 w-full md:w-2/3"
             style={{
               // 65px is the height of the header
               maxHeight: "calc(100vh - 65px)",
             }}
           >
-            <Separator orientation="vertical" />
+            <Separator orientation="vertical" className="hidden md:block" />
+
             <div id="trx-table" className="pb-16 overflow-y-scroll w-full">
               <TransactionTable
                 transactions={transactions}
@@ -149,7 +159,7 @@ export default function Home() {
                 deleteRow={deleteRow}
               />
             </div>
-            <div className="fixed flex items-center justify-between w-2/3 h-16 px-4 border rounded-md bottom-4 right-6 bg-background border-muted">
+            <div className="fixed hidden md:flex items-center justify-between w-2/3 h-16 px-4 border rounded-md bottom-4 right-6 bg-background border-muted">
               <div>Total Expenses: {formattedTotalExpenses}</div>
               <div className="flex gap-2">
                 <Button onClick={saveToCSV} variant={"secondary"}>
