@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 // Types
 import type { FormattedBilling, SupportedModel } from "@/lib/pdf-parser/types";
@@ -23,6 +24,8 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
   const [base64PDF, setBase64PDF] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
 
+  const { toast } = useToast();
+
   const fileToBase64 = (file: File) => {
     return new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
@@ -44,6 +47,7 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
 
     try {
       setIsLoading(true);
+
       const response = await fetch("/api/parse-pdf", {
         method: "POST",
         body: formData,
@@ -63,9 +67,12 @@ export function useUploadBillingsViewModal({ onSuccessfulUpload }: Params) {
 
       onSuccessfulUpload(data.transactions);
     } catch (error) {
-      // TODO: Use better component for error handling
       console.error("Error uploading file:", error);
-      alert("Failed to upload and parse the file. Please try again.");
+      toast({
+        title: "Error",
+        description: "Failed to upload file and parse file. Please try again.",
+        variant: "destructive",
+      });
       setBase64PDF(undefined);
     } finally {
       setIsLoading(false);

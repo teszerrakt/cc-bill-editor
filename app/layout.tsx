@@ -1,6 +1,7 @@
 import Link from "next/link";
 import "./globals.css";
 import { Space_Grotesk } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           </h1>
         </header>
         {children}
+        <Toaster />
       </body>
     </html>
   );
