@@ -80,12 +80,8 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div
-        className="flex flex-col items-center justify-center gap-4"
-        style={{
-          height: "calc(100vh - 65px)",
-        }}
-      >
+      // 65px is the height of the header
+      <div className="flex flex-col items-center justify-center gap-4 h-[calc(100vh-65px)]">
         <div className="animate-spin">
           <LoaderCircle className="w-10 h-10" />
         </div>
@@ -101,7 +97,7 @@ export default function Home() {
           <div
             className={cn("flex mx-auto justify-center w-full md:w-[500px]")}
           >
-            <div className="flex flex-col gap-4 py-8 px-12 border h-fit rounded-lg mt-40">
+            <div className="flex flex-col gap-4 py-8 px-12 border h-fit rounded-lg mt-20 md:mt-40">
               <p className="mb-4 text-center">
                 Transform your credit card bills into an organized table and
                 downloadable CSV.
@@ -155,11 +151,8 @@ export default function Home() {
 
         {transactions?.length > 0 && (
           <div
-            className="flex gap-4 md:p-4 w-full md:w-2/3"
-            style={{
-              // 65px is the height of the header
-              maxHeight: "calc(100vh - 65px)",
-            }}
+            // 65px is the height of the header
+            className="flex gap-4 md:p-4 w-full md:w-2/3 md:h-[calc(100vh-65px)]"
           >
             <Separator orientation="vertical" className="hidden md:block" />
 
