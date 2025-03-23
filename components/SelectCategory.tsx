@@ -13,9 +13,13 @@ const CATEGORIES = [
   "Shopping",
   "Entertainment",
   "Health",
+  "Grooming",
+  "Skin Care",
   "Subscription",
   "Rent",
   "Electricity",
+  "Cash Out",
+  "Credit Card",
 ];
 
 type Props = {
